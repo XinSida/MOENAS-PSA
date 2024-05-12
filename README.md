@@ -9,7 +9,7 @@ We first conducted a sensitivity analysis for each parameter and perform regress
 
 MOENAS-PSA is able to reduce the evaluation cost through search space reduction while accomplishing multi-objective optimization of network architecture.
 
-The search space of MOENAS in this code is obtained with k=1 in the UCB algorithm.  
+This code performs MOENAS on a single-layer LSM model with three parallel reservoirs using the N-MNIST dataset. The search space is obtained with k=1 in the UCB algorithm.  
 ## Code Structure
 .
 
