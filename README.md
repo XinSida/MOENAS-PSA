@@ -7,6 +7,7 @@ We first conducted a sensitivity analysis for each parameter and perform regress
 MOENAS-PSA is able to reduce the evaluation cost through search space reduction while accomplishing multi-objective optimization of network architecture.
 ## Code Structure
 .
+
 ├── input_spike_record -- N-MNIST dataset
 
 ├── LSM_MOENAS.sh -- run the experiment in batch
@@ -25,6 +26,8 @@ MOENAS-PSA is able to reduce the evaluation cost through search space reduction 
 - TensorFlow 2.15.0
 ## Getting Started
 Run the script file with bash, for example:
-```./LSM_MOENAS.sh```
+```
+{./LSM_MOENAS.sh}
+```
 
 
