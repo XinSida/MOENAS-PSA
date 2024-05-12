@@ -2,7 +2,7 @@
 > Multi-Objective Evolutionary Neural Architecture Search for Liquid State Machine
 ## Overview
 <!-- ![](images/flowchart.png) -->
-<img src="images/flowchart.png" width="600">
+<img src="images/flowchart.png" width="670">
 
 MOENAS-PSA comprises three steps. 
 We first conducted a sensitivity analysis for each parameter and perform regression analysis. Then we used UCB algorithm to restrict the search space for each parameter. Finally, we applied the multi-objective ENAS method, along with a surrogate-assisted approach to optimize LSM architectures. 
