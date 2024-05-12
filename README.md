@@ -22,8 +22,10 @@ MOENAS-PSA is able to reduce the evaluation cost through search space reduction 
 ## Requirements
 - Operating system: tested in Ubuntu 20.04
 - Python 3.9.0
+- Brian2 2.5.4
 - pymoo 0.6.1.1
 - TensorFlow 2.15.0
+
 ## Getting Started
 Run the script file with bash, for example:
 ```
@@ -33,5 +35,12 @@ Run the script file with bash, for example:
 The ENAS results are saved in txt format, named `function_evaluation.txt`.
 
 To see the Pareto front compared with the SOTA, run `visualization.py`.
+## Citation
+If you find our repository helpful to your research, please cite our paper:
+```
+@article{
+}
+```
+
 
 
