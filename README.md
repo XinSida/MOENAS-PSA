@@ -31,6 +31,7 @@ Run the script file with bash, for example:
 ```
 ## Result
 The ENAS results are saved in txt format, named `function_evaluation.txt`.
+
 To see the Pareto front compared with the SOTA, run `visualization.py`.
 
 
