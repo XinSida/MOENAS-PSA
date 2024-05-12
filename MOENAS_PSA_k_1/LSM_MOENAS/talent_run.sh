@@ -1,6 +1,5 @@
 #!/bin/bash
-simulation_date=`date | awk '{print $1$2$3$5}' | awk -F 年 '{print $1$2}' | awk -F 月 '{print $1$2}' | awk -F 日 '{print $1$2}' | awk -F : '{print $1$2}' | awk -F : '{print $1}'`
-echo $simulation_date
+
 echo "The number of training examples: $1"
 echo "The number of testing examples: 10000"
 bash_path='./MOENAS_PSA_k_1/LSM_MOENAS'
