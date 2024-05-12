@@ -159,7 +159,7 @@ neuron_group[name_neuron_group] = SpikeGeneratorGroup(IN_population, input_spike
 RCe_population_list = []
 RCi_population_list = []
 
-for i in range(num_RC_layer):  #逐层遍历
+for i in range(num_RC_layer):  
     cell_defination = pickle.load(cell_defination_file)
     if int(cell_defination[0][0]) != (len(cell_defination) - 1) or len(cell_defination[1]) != 6:
         raise Exception("RC cell defination is wrong!")
