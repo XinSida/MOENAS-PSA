@@ -31,7 +31,6 @@ from keras.optimizers import SGD
 from tensorflow.keras.utils import to_categorical
 import tensorflow as tf
 
-# 在代码开始处定义全局变量
 global actual_evaluations
 actual_evaluations = 0
 
@@ -41,7 +40,6 @@ np.random.seed(1)
 def evaluate_accuracy(x):
     global actual_evaluations
 
-    # 这里应该是计算准确度的实际逻辑，返回准确度值
     print('___________________time begin________________________')
     print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
     old_time = time.time()
@@ -85,14 +83,12 @@ def evaluate_accuracy(x):
 
     pickle.dump(interconnection_1, interconnection_file)
 
+    # Parameter value range.
     OUT_sample_defination = np.array([[0.9, 0.0], [0.9, 0.0], [0.9, 0.0], [0.9, 0.0], [0.9, 0.0]])
     
     interconnection_file.close() 
 
-          
-
-    os.system('./MOENAS_PSA_k_1/LSM_MOENAS/talent_run.sh' +' '+'6000')
-
+    os.system('./MOENAS_PSA_k_1/LSM_MOENAS/talent_run.sh' + ' ' + '6000')
 
     ##-----------------------------------------------------------------------------------------
     ## main function
@@ -102,16 +98,16 @@ def evaluate_accuracy(x):
     working_time = int(sys.argv[3])
     resting_time = int(sys.argv[4])
 
-    OUT_population = 10 #假定和0到9共10个数字有关
+    OUT_population = 10 #The numbers 0 through 9, totaling ten digits.
 
     path_spike_record = './MOENAS_PSA_k_1/LSM_MOENAS/simulation_archive/result_training'
     path_weight_learned = './MOENAS_PSA_k_1/LSM_MOENAS/simulation_archive/weight_learned'
     
-    #RC_defination_path = './MOENAS_PSA_k_1/LSM_defination'
-    
     RCe_population_array = np.load(path_RC_defination + '/RCe_population_array.npy')
     RCi_population_array = np.load(path_RC_defination + '/RCi_population_array.npy')
-    ##--------------RC state process--------------------##生成RC_state_vector
+    
+    ##--------------LSM state process--------------------##
+    
     RC_num = RCe_population_array.size + RCi_population_array.size
     connection_random_combine = np.array([], dtype = int)
     spike_normalized_combine = np.array([]) 
@@ -123,35 +119,34 @@ def evaluate_accuracy(x):
     error_during_training = np.array([], dtype = float)
 
     for i in range(RC_num):#10 0~9
-        if OUT_sample_defination[i//2][i%2] != 0:#array([[0.9, 0. ],[0.9, 0. ],[0.9, 0. ],[0.9, 0. ],[0.9, 0. ]])水库所有内部参数的范围？
-        #这里i只为偶数，后面只涉及每个水库兴奋型神经元的累计发射计算
-            if i % 2 == 0:#定位到每行前一列
-                RC_population = RCe_population_array[i // 2] #都是160  每个水库兴奋型神经元数量
+        if OUT_sample_defination[i//2][i%2] != 0:
+            if i % 2 == 0:
+                RC_population = RCe_population_array[i // 2] 
             else:
-                RC_population = RCi_population_array[i // 2] #都是40，每个水库抑制型神经元数量，这里不运行
-            RC_OUT_prob = OUT_sample_defination[i // 2, i % 2]  #都是0.9
-            RC_sampled_population += RC_population  #这里只为160，每轮倍增
-            connection_random = np.zeros((OUT_population, RC_population), dtype = int)#10行160列
-            array_uniform = np.random.uniform(0, 1, (OUT_population, RC_population))#[0,1)范围内随机数，10行160列
-            connection_random[array_uniform < RC_OUT_prob] = 1 #array_uniform小于0.9的位置，connection_random设置为1
-            if combine_number == 0:#执行这个
+                RC_population = RCi_population_array[i // 2] 
+            RC_OUT_prob = OUT_sample_defination[i // 2, i % 2] 
+            RC_sampled_population += RC_population  
+            connection_random = np.zeros((OUT_population, RC_population), dtype = int)
+            array_uniform = np.random.uniform(0, 1, (OUT_population, RC_population))
+            connection_random[array_uniform < RC_OUT_prob] = 1 
+            if combine_number == 0:
                 connection_random_combine = connection_random
             else:
-                connection_random_combine = np.append(connection_random_combine, connection_random, axis = 1)#向右扩展
+                connection_random_combine = np.append(connection_random_combine, connection_random, axis = 1)
             if connection_random_combine[0].size != RC_sampled_population:
                 raise Exception('Connection random combination is wrong!')
             if i == 0:
                 spike_index_file = path_spike_record + '/dynamic_array_spikemonitor_i_'
                 spike_time_file = path_spike_record + '/dynamic_array_spikemonitor_t_'
             else:
-                spike_index_file = path_spike_record + '/dynamic_array_spikemonitor_' + str(i) + '_i_'#每个水库的全部兴奋型或抑制型神经元的脉冲索引，这里只取每个水库兴奋型神经元的记录文件
-                spike_time_file = path_spike_record + '/dynamic_array_spikemonitor_' + str(i) + '_t_'  #最高5000秒，单位second
+                spike_index_file = path_spike_record + '/dynamic_array_spikemonitor_' + str(i) + '_i_'
+                spike_time_file = path_spike_record + '/dynamic_array_spikemonitor_' + str(i) + '_t_' 
             spike_monitor_index = np.fromfile(spike_index_file, dtype = np.int32, count = -1, sep = "" )
             spike_monitor_time = np.fromfile(spike_time_file, dtype = np.float64, count = -1, sep = "") #second
             if len(spike_monitor_index) != len(spike_monitor_time):
                 raise Exception('Spike records may not read properly!')
             
-            np.append(firing_rate_per_neuron_per_example, float(len(spike_monitor_index))/RC_population/num_example)#每个水库兴奋型神经元相对于每个样本的放电数量
+            np.append(firing_rate_per_neuron_per_example, float(len(spike_monitor_index))/RC_population/num_example)
             
             spike_counter = np.zeros((num_example, RC_population), dtype = int)
             spike_counter_working = np.zeros((num_example, RC_population), dtype = int)
@@ -256,7 +251,7 @@ def evaluate_accuracy(x):
     path_spike_record = './MOENAS_PSA_k_1/LSM_MOENAS/simulation_archive/result_testing'
     path_weight_learned = './MOENAS_PSA_k_1/LSM_MOENAS/simulation_archive/weight_learned'
     
-    ##--------------RC state process--------------------##
+    ##--------------LSM state process--------------------##
     
     spike_normalized_combine = np.array([]) 
     spike_normalized_combine_working = np.array([]) 
@@ -368,22 +363,21 @@ def evaluate_accuracy(x):
         fw.write('cost:'+str(round(x[0])+round(x[1])+round(x[2]))+'\n')
         fw.write('actual_evaluations:'+str(actual_evaluations)+'\n') 
         fw.write(str(x)+'\n'+'\n')
-
-    ###开始删除不要的文件
-    subprocess.run('rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/output/results/*', shell=True, check=True)
-    subprocess.run('rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/output/static_arrays/*', shell=True, check=True)
-    subprocess.run('rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/result/*', shell=True, check=True)
-    subprocess.run('rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/simulation_archive/random_connection/*', shell=True, check=True)
-    subprocess.run('rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/simulation_archive/result_testing/*', shell=True, check=True)
-    subprocess.run('rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/simulation_archive/result_training/*', shell=True, check=True)
-    subprocess.run('rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/simulation_archive/weight_learned/*', shell=True, check=True)
-    subprocess.run('rm -rf ./MOENAS_PSA_k_1/LSM_defination/*', shell=True, check=True)
-
+        
+    command_delete = (
+        "rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/output/results/* && "
+        "rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/output/static_arrays/* && "
+        "rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/result/* && "
+        "rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/simulation_archive/random_connection/* && "
+        "rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/simulation_archive/result_testing/* && "
+        "rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/simulation_archive/result_training/* && "
+        "rm -rf ./MOENAS_PSA_k_1/LSM_MOENAS/simulation_archive/weight_learned/* && "
+        "rm -rf ./MOENAS_PSA_k_1/LSM_defination/*"
+    )
+    subprocess.run(command_delete, shell=True, check=True)
 
     return score[1]
 
-
-# 初始化支持增量学习的替代模型和标准化器
 surrogate_accuracy = SGDRegressor(max_iter=1000, tol=1e-3)
 feature_scaler = StandardScaler()
 is_surrogate_trained = False
@@ -408,27 +402,22 @@ def load_state():
     except FileNotFoundError:
         return None, None, None
 
-
 def get_initial_training_data(n_samples):
     """
-    在指定的约束条件下随机生成n_samples个解向量。
+    Randomly generate n_samples solution vectors under specified constraints.
     """
     global is_surrogate_trained
 
-    # 加载之前的状态
     X_loaded, Y_loaded, start_index = load_initial_state()
 
-    # 如果没有找到保存的状态，初始化数据
     if X_loaded is None:
-        # 预分配存储解向量的数组，16个变量
-        X_initial = np.zeros((n_samples, 16))
+        
+        X_initial = np.zeros((n_samples, 16))# Preallocate an array to store solution vectors, with 16 variables because two monotonic parameters were excluded.
 
-        # 变量的全局取值范围，由问题定义给出
         global_bounds = np.array([
             [50.0, 500.0], [50.0, 500.0], [50.0, 500.0],[0.09,0.8999999999999999],[0.7649999999999999,0.855],[0.49499999999999994,0.8999999999999999],[0.0,0.7500000000000001],[0.0,0.15000000000000002],[0.0,0.25],[0.0,0.9],[0.25000000000000006,0.9],[0.15000000000000002,0.6500000000000001],[0.0,0.8500000000000001],[0.35000000000000003,0.6500000000000001],[0.15000000000000002,0.9],[0.0,0.9]
         ])
 
-        # 特定变量的不连续区间约束
         discrete_intervals = {
             3: [(0.09, 0.22499999999999998), (0.22500000000000003, 0.40499999999999997), (0.6749999999999999, 0.765), (0.8549999999999999, 0.8999999999999999)],
             6: [(0.0, 0.05), (0.25000000000000006, 0.35000000000000003), (0.65, 0.7500000000000001)],
@@ -440,13 +429,13 @@ def get_initial_training_data(n_samples):
             15: [(0.0, 0.25), (0.25000000000000006, 0.35000000000000003), (0.45, 0.55), (0.75, 0.9)],
         }
 
-        for i in range(16):  # 对于每个变量
-            if i in discrete_intervals:  # 如果变量有不连续区间约束
+        for i in range(16): 
+            if i in discrete_intervals: 
                 for j in range(n_samples):
-                    interval = discrete_intervals[i][np.random.randint(len(discrete_intervals[i]))]  # 随机选择一个有效区间
-                    X_initial[j, i] = np.random.uniform(interval[0], interval[1])  # 在选定的区间内生成随机数
-            else:  # 如果变量没有不连续区间约束
-                X_initial[:, i] = np.random.uniform(global_bounds[i][0], global_bounds[i][1], size=n_samples)  # 在全局取值范围内生成随机数
+                    interval = discrete_intervals[i][np.random.randint(len(discrete_intervals[i]))] 
+                    X_initial[j, i] = np.random.uniform(interval[0], interval[1])  
+            else:  
+                X_initial[:, i] = np.random.uniform(global_bounds[i][0], global_bounds[i][1], size=n_samples) 
 
         Y_accuracy_initial = []
         start_index = 0
@@ -460,27 +449,25 @@ def get_initial_training_data(n_samples):
         try:
             acc = evaluate_accuracy(X_initial[i])
             Y_accuracy_initial.append(acc)
-            #save_state(X_initial, Y_accuracy_initial, i + 1)  # 更新保存的状态
+            #save_state(X_initial, Y_accuracy_initial, i + 1)  # Since a trained model is already provided, we will not run it here.
         except Exception as e:
             print(f"Error processing sample {i}: {e}")
             break
 
-    # 对特征进行标准化
     X_initial_scaled = feature_scaler.fit_transform(X_initial)
-    # 训练替代模型
+    
     surrogate_accuracy.partial_fit(X_initial_scaled, Y_accuracy_initial)
     is_surrogate_trained = True
 
-    # 返回生成的解向量
     return X_initial, Y_accuracy_initial
 
 def select_indices_for_real_eval(gen, n_samples, eval_frequency=10, eval_percentage=0.2):
     """
-    在每eval_frequency代选择一定比例的个体进行真实评估。
-    gen: 当前代数
-    n_samples: 当前种群的大小
-    eval_frequency: 进行真实评估的频率
-    eval_percentage: 每次选择进行真实评估的个体所占的比例
+    Select a certain percentage of individuals for real evaluation at every eval_frequency generations:
+    gen: current generation number
+    n_samples: current population size
+    eval_frequency: frequency of real evaluations
+    eval_percentage: percentage of individuals selected for real evaluation each time
     """
     if gen % eval_frequency == 0:
         n_eval = int(np.ceil(eval_percentage * n_samples))
@@ -488,16 +475,11 @@ def select_indices_for_real_eval(gen, n_samples, eval_frequency=10, eval_percent
     else:
         return np.array([])
 
-
-
 X_initial, Y_accuracy_initial = get_initial_training_data(n_samples=100)
 
-
-# 定义优化问题 
 class PSANAS(Problem):
     def __init__(self):
-        # 连续变量的不连续区间约束
-        self.continuous_intervals = { #基于0的索引
+        self.continuous_intervals = { # Zero-based indexing.
             5: [(0.585, 0.675), (0.8549999999999999, 0.8999999999999999)],
             6: [(0.0, 0.05), (0.25000000000000006, 0.35000000000000003)],
             12: [(0.0, 0.05), (0.35000000000000003, 0.55), (0.65, 0.7500000000000001)],
@@ -505,18 +487,14 @@ class PSANAS(Problem):
             15: [(0.05, 0.15000000000000002), (0.85, 0.9)],
         }
 
-        # 计算总的区间数量
         total_intervals = sum(len(v) for v in self.continuous_intervals.values())
 
-        # 定义问题维度：16个变量，2个目标，多个约束
+        # Define the problem dimensions: 16 variables, 2 objectives, and multiple constraints.
         super().__init__(n_var=16, n_obj=2, n_constr=total_intervals + 3, xl=np.array([50.0, 50.0, 50.0,0.8549999999999999, 0.7649999999999999, 0.585, 0.0, 0.0, 0.0, 0.75, 0.35000000000000003, 0.25000000000000006, 0.0, 0.35000000000000003, 0.15000000000000002, 0.05]), xu=np.array([1000.0, 1000.0, 1000,0.8999999999999999, 0.855, 0.8999999999999999, 0.35000000000000003, 0.05, 0.25, 0.8500000000000001, 0.45, 0.6500000000000001, 0.7500000000000001, 0.45, 0.9, 0.9]))
-        
-        # 初始化代数计数器
+
         self.gen = 0
-        
-        # 离散变量的索引
-        self.discrete_var_indices = [0, 1, 2]
-        
+
+        self.discrete_var_indices = [0, 1, 2]     
 
     def _evaluate(self, X, out, *args, **kwargs):
         global is_surrogate_trained, X_initial, Y_accuracy_initial, actual_evaluations
@@ -524,59 +502,46 @@ class PSANAS(Problem):
         X_round = np.copy(X)
         X_round[:, :3] = np.round(X_round[:, :3])
 
-        # 初始化输出和约束违反度
-        F = np.zeros((X.shape[0], 2))
-        g = np.zeros((X.shape[0], self.n_constr))
+        F = np.zeros((X.shape[0], 2)) # Initialize outputs.
+        g = np.zeros((X.shape[0], self.n_constr)) # Initialize the degree of constraint violation.
 
-        # 对特征进行标准化
         X_scaled = feature_scaler.transform(X_round)
 
-        # 选择性真实评估的个体
         indices_to_evaluate = select_indices_for_real_eval(self.gen, X.shape[0])
         
         for i in range(X.shape[0]):
             x_scaled = X_scaled[i, :]
-            F[i, 1] = X_round[i][0] + X_round[i][1] + X_round[i][2]  # 第二个目标Net Scale
+            F[i, 1] = X_round[i][0] + X_round[i][1] + X_round[i][2]  # The second objective: Net Scale.
             
             if i in indices_to_evaluate or not is_surrogate_trained:
-                # 对选中的个体进行真实评估
                 actual_evaluations += 1 
-                F[i, 0] = 1 - evaluate_accuracy(X_round[i])  # 将评估结果转换为最小化问题
+                F[i, 0] = 1 - evaluate_accuracy(X_round[i])  # Convert evaluation results into a minimization problem.
 
-                # 准备更新模型的数据
-                new_x = X_round[i].reshape(1, -1)  # 使用原始数据点
+                new_x = X_round[i].reshape(1, -1) 
                 new_y = np.array([1 - F[i, 0]])
 
-                # 在使用原始数据之前，需要将它标准化
                 new_x_scaled = feature_scaler.transform(new_x)
 
-                # 更新模型（仅在有真实评估的个体时）
                 if not is_surrogate_trained:
-                    # 第一次使用真实评估结果训练模型
                     surrogate_accuracy.partial_fit(new_x_scaled, new_y)
                     is_surrogate_trained = True
                 else:
-                    # 使用新的真实评估结果更新模型
                     surrogate_accuracy.partial_fit(new_x_scaled, new_y)
 
-                # 更新全局训练数据集
                 if X_initial.size == 0: 
                     X_initial = new_x
                     Y_accuracy_initial = new_y
                 else:
                     X_initial = np.vstack([X_initial, new_x])
                     Y_accuracy_initial = np.append(Y_accuracy_initial, new_y)
-                
             else:
-                # 使用替代模型预测准确度
                 F[i, 0] = 1 - surrogate_accuracy.predict(x_scaled.reshape(1, -1))[0]    
-
-        
-        # 计算离散变量的约束违反度
+                
+        # Calculate the constraint violation for discrete variables.
         for idx in self.discrete_var_indices:
             g[i, idx] = abs(X[i, idx] - X_round[i, idx])
         
-        # 计算不连续区间的约束违反度
+        # Calculate the constraint violation for non-continuous intervals.
         interval_idx = len(self.discrete_var_indices)
         for var_idx, intervals in self.continuous_intervals.items():
             for j, (a, b) in enumerate(intervals):
@@ -590,10 +555,8 @@ class PSANAS(Problem):
 
 problem = PSANAS()
 
-# 选择多目标优化算法
 algorithm = NSGA2(pop_size=100)
 
-# 最小化问题
 result = minimize(problem,
                   algorithm,
                   termination=('n_gen', 500),
