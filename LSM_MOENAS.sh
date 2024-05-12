@@ -1,8 +1,8 @@
 #!/bin/bash
 
-echo '#: Input the number of training examples: '
-read num_example
-
+#echo '#: Input the number of training examples: '
+#read num_example
+num_example=6000
 using_resting=1
 
 python "MOENAS.py" $num_example $using_resting 330 170 
