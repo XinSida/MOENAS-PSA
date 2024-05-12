@@ -6,3 +6,5 @@ MOENAS-PSA comprises three steps.
 We first conducted a sensitivity analysis for each parameter and perform regression analysis. Then we used UCB algorithm to restrict the search space for each parameter. Finally, we applied the multi-objective ENAS method, along with a surrogate-assisted approach to optimize LSM architectures. 
 MOENAS-PSA is able to reduce the evaluation cost through search space reduction while accomplishing multi-objective optimization of network architecture.
 ## Code Structure
+LSM_MOENAS.sh -- run the experiment in batch
+MOENAS.py -- main execution file
