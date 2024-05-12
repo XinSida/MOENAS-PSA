@@ -8,10 +8,15 @@ MOENAS-PSA is able to reduce the evaluation cost through search space reduction 
 ## Code Structure
 .
 ├── input_spike_record -- N-MNIST dataset
+
 ├── LSM_MOENAS.sh -- run the experiment in batch
+
 ├── MOENAS_PSA_k_1 -- LSM simulation
+
 ├── MOENAS.py -- main execution file
+
 ├── visualization.py -- result visualization
+
 └── saved_state_100_16.pkl -- surrogate model
 ## Requirements
 - Operating system: tested in Ubuntu 20.04
