@@ -19,7 +19,7 @@ This code performs MOENAS on a single-layer LSM model with three parallel reserv
 
 ├── MOENAS_PSA_k_1 -- LSM simulation
 
-├── MOENAS.py -- main execution file
+├── MOENAS.py -- main execution file, RC means Reservoir computation
 
 ├── visualization.py -- result visualization
 
