@@ -27,7 +27,9 @@ MOENAS-PSA is able to reduce the evaluation cost through search space reduction 
 ## Getting Started
 Run the script file with bash, for example:
 ```
-{./LSM_MOENAS.sh}
+./LSM_MOENAS.sh
 ```
+## Result
+The ENAS results are saved in txt format, named `function_evaluation.txt`.
 
 
