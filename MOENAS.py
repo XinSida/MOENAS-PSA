@@ -142,7 +142,7 @@ def evaluate_accuracy(x):
     expensive = current_time - old_time
 
     with open("function_evaluation.txt", "a") as fw:
-        fw.write('evaluation time:'+str(expensive//60)+'分钟'+'\n')
+        fw.write('evaluation time:'+str(expensive//60)+' min'+'\n')
         fw.write('accuracy:'+str(score[1]*100)+'%'+'\n') 
         fw.write('cost:'+str(round(x[0])+round(x[1])+round(x[2]))+'\n')
         fw.write('actual_evaluations:'+str(actual_evaluations)+'\n') 
