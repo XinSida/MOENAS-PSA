@@ -8,7 +8,7 @@ Sida Xin, Renzhi Chen, Xun Xiao, Yuan Li, Lei Wang
 <!-- ![](images/flowchart.png) -->
 <img src="images/flowchart.png" width="670">
 
-![](doc/PF_generate.gif)
+<img src="doc/PF_generate.gif" width="670">
 
 This repository contains Python implementation of the algorithm based on multi-objective Evolutionary Neural Architecture Search and parameter sensitivity analysis (MOENAS-PSA).
 
