@@ -8,12 +8,9 @@ Sida Xin, Renzhi Chen, Xun Xiao, Yuan Li, Lei Wang
 <!-- ![](images/flowchart.png) -->
 <img src="images/flowchart.png" width="670">
 
-MOENAS-PSA comprises three steps. 
-We first conducted a sensitivity analysis for each parameter and perform regression analysis. Then we used UCB algorithm to restrict the search space for each parameter. Finally, we applied the multi-objective ENAS method, along with a surrogate-assisted approach to optimize LSM architectures. 
+This repository contains Python implementation of the algorithm based on multi-objective Evolutionary Neural Architecture Search and parameter sensitivity analysis (MOENAS-PSA).
 
-MOENAS-PSA is able to reduce the evaluation cost through search space reduction while accomplishing multi-objective optimization of network architecture.
-
-This code performs MOENAS on a single-layer LSM model with three parallel reservoirs using the N-MNIST dataset. The search space is obtained with k=1 in the UCB algorithm.  
+The code in this repository performs MOENAS on a single-layer LSM model with three parallel reservoirs using the N-MNIST dataset. The search space is obtained with k=1 in the UCB algorithm.  
 ## Code Structure
 .
 
