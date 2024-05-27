@@ -8,6 +8,8 @@ Sida Xin, Renzhi Chen, Xun Xiao, Yuan Li, Lei Wang
 <!-- ![](images/flowchart.png) -->
 <img src="images/flowchart.png" width="670">
 
+![](doc/PF_generate.gif)
+
 This repository contains Python implementation of the algorithm based on multi-objective Evolutionary Neural Architecture Search and parameter sensitivity analysis (MOENAS-PSA).
 
 The code in this repository performs MOENAS on a single-layer LSM model with three parallel reservoirs using the N-MNIST dataset. The search space is obtained with k=1 in the UCB algorithm.  
