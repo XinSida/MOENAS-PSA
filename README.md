@@ -1,5 +1,7 @@
 # MOENAS-PSA
 > Multi-Objective Evolutionary Neural Architecture Search for Liquid State Machine
+Sida Xin, Renzhi Chen, Xun Xiao, Yuan Li, Lei Wang
+[Supplementary](doc/supplemental.pdf)
 ## Overview
 <!-- ![](images/flowchart.png) -->
 <img src="images/flowchart.png" width="670">
