@@ -18,7 +18,7 @@ The code in this repository performs MOENAS on a single-layer LSM model with thr
 
 ├── input_spike_record -- N-MNIST dataset
 
-├── LSM_MOENAS.sh -- run the experiment in batch
+├── LSM_MOENAS.sh -- run the experiment in bash
 
 ├── MOENAS_PSA_k_1 -- LSM simulation
 
