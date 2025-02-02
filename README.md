@@ -46,7 +46,13 @@ To see the Pareto front compared with the SOTA, run `visualization.py`.
 ## Citation
 If you find our repository helpful to your research, please cite our paper:
 ```
-@article{
+@inproceedings{xin2024multi,
+  title={Multi-Objective Evolutionary Neural Architecture Search for Liquid State Machine},
+  author={Xin, Sida and Chen, Renzhi and Xiao, Xun and Li, Yuan and Wang, Lei},
+  booktitle={2024 IEEE International Conference on Systems, Man, and Cybernetics (SMC)},
+  pages={2701--2706},
+  year={2024},
+  organization={IEEE}
 }
 ```
 
